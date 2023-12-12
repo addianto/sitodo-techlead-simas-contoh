@@ -47,40 +47,30 @@ public class MotivationMessageServiceImpl implements MotivationMessageService {
             output.append(emptyListMessage);
         } else if (total < manyItemsThreshold) {
             output.append(fewItemsMessage);
-
-            if (finished == total) {
-                output.append(" ").append(allFinishedMessage);
-            } else if (finished == 0) {
-                output.append(" ").append(noFinishedMessage);
-            } else if (finished < total) {
-                if (finished >= total / 2) {
-                    output.append(" ").append(halfFinishedMessage);
-                } else {
-                    output.append(someFinishedMessage);
-                }
-            } else {
-                output.append(someFinishedMessage);
-            }
+            computeInternalMotivationMessage(total, finished, output);
         } else {
             output.append(manyItemsMessage);
-
-            if (finished == total) {
-                output.append(allFinishedMessage);
-            } else if (finished == 0) {
-                output.append(" ").append(noFinishedMessage);
-            } else if (finished < total) {
-                if (finished >= total / 2) {
-                    output.append(" ").append(halfFinishedMessage);
-                } else {
-                    output.append(someFinishedMessage);
-                }
-            } else {
-                output.append(someFinishedMessage);
-            }
+            computeInternalMotivationMessage(total, finished, output);
         }
 
         log.debug("Resulting output: {}", output.toString());
 
         return output.toString();
+    }
+
+    private void computeInternalMotivationMessage(long total, long finished, StringBuilder output) {
+        if (finished == total) {
+                output.append(" ").append(allFinishedMessage);
+        } else if (finished == 0) {
+            output.append(" ").append(noFinishedMessage);
+        } else if (finished < total) {
+            if (finished >= total / 2) {
+                output.append(" ").append(halfFinishedMessage);
+            } else {
+                output.append(someFinishedMessage);
+            }
+        } else {
+            output.append(someFinishedMessage);
+        }
     }
 }
