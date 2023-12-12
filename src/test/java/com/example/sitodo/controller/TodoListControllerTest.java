@@ -171,6 +171,18 @@ class TodoListControllerTest {
         ).andExpectAll(status().isOk());
     }
 
+    @Test
+    @DisplayName("First visit to /list should produce a correct string in the HTML page")
+    void showList_countFirstVisit() throws Exception {
+        mockMvc.perform(get("/list"))
+           .andExpectAll(
+               status().isOk(),
+               content().contentTypeCompatibleWith(TEXT_HTML),
+               content().encoding(UTF_8),
+               content().string(containsString("This list has been viewed 1 time"))
+           );
+    }
+
     private TodoList createMockTodoList(Long id, TodoItem... items) {
         TodoList mockTodoList = mock(TodoList.class);
 
