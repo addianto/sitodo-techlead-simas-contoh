@@ -24,6 +24,8 @@ public class TodoListController {
 
     private MotivationMessageService motivationMessageService;
 
+    private static int VISIT = 0;
+
     @Autowired
     public void setTodoListService(TodoListService todoListService) {
         this.todoListService = todoListService;
@@ -36,20 +38,24 @@ public class TodoListController {
 
     @GetMapping("/list")
     public String showList(Model model) {
+        VISIT++;
         model.addAttribute("todoItemForm", new TodoItemForm());
         model.addAttribute(MOTIVATION_MESSAGE_KEY, motivationMessageService.computeMotivationMessage(0, 0));
+        model.addAttribute("countMessage", "This list has been viewed " + VISIT +  " time");
 
         return "list";
     }
 
     @GetMapping("/list/{id}")
     public String showList(@PathVariable("id") Long id, Model model) {
+        VISIT++;
         TodoListDto foundTodoList = todoListService.getTodoListById(id);
         log.debug("Show list with ID {}", foundTodoList.id());
 
         model.addAttribute("todoList", foundTodoList);
         model.addAttribute("todoItemForm", new TodoItemForm());
         model.addAttribute(MOTIVATION_MESSAGE_KEY, motivationMessageService.computeMotivationMessage(foundTodoList.countTotal(), foundTodoList.countFinishedItems()));
+        model.addAttribute("countMessage", "This list has been viewed " + VISIT +  " time");
 
         return "list";
     }
@@ -105,5 +111,17 @@ public class TodoListController {
 
     private String redirectToList(Long id) {
         return String.format("redirect:/list/%d", id);
+    }
+
+    public void setVisit(int value) {
+        VISIT = value;
+    }
+
+    @GetMapping("/reset")
+    public String resetVisit() {
+        // Quickhack during training
+        VISIT = 0;
+
+        return "404";
     }
 }
