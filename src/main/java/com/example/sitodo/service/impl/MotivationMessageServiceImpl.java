@@ -60,7 +60,7 @@ public class MotivationMessageServiceImpl implements MotivationMessageService {
 
     private void computeInternalMotivationMessage(long total, long finished, StringBuilder output) {
         if (finished == total) {
-                output.append(" ").append(allFinishedMessage);
+            output.append(" ").append(allFinishedMessage);
         } else if (finished == 0) {
             output.append(" ").append(noFinishedMessage);
         } else if (finished < total) {
